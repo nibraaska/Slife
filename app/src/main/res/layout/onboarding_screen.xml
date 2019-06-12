@@ -7,12 +7,12 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.56882256" />
+            app:layout_constraintGuide_percent="0.56882256"/>
 
     <ImageView
             android:id="@+id/intro_img"
@@ -39,7 +39,7 @@
             android:layout_marginBottom="8dp"
             android:paddingTop="20dp"
             tools:text="Title"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textAlignment="center"
@@ -60,7 +60,7 @@
             android:layout_marginBottom="8dp"
             android:lineSpacingExtra="16dp"
             tools:text="Description"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
