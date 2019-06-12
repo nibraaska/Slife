@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.nibraas.slife.MainActivity
 import com.nibraas.slife.R
 import java.util.ArrayList
+import kotlin.math.log
 
 class IntroActivity: AppCompatActivity() {
 
@@ -33,8 +34,8 @@ class IntroActivity: AppCompatActivity() {
     private lateinit var tvSkip: TextView
     private var first: Boolean = true
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Make it full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -125,6 +126,8 @@ class IntroActivity: AppCompatActivity() {
                     }else if(p0.position != mList.size - 1){
                         btnPrev.visibility = View.VISIBLE
                         btnNext.visibility = View.VISIBLE
+                        register.visibility = View.GONE
+                        login.visibility = View.GONE
                     }
                 }
             }
@@ -147,13 +150,16 @@ class IntroActivity: AppCompatActivity() {
         }
 
         // skip button click listener
-        tvSkip.setOnClickListener { screenPager!!.currentItem = mList.size }
+        tvSkip.setOnClickListener {
+            screenPager!!.currentItem = mList.size
+            loadLastScreen()
+        }
     }
 
     // Checks prefs for open key
     private fun restorePrefData(): Boolean {
         val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        return pref.getBoolean("isIntroOpnend", false)
+        return pref.getBoolean("openedBefore", false)
     }
 
     // Last page set up
@@ -176,6 +182,6 @@ class IntroActivity: AppCompatActivity() {
     // Saves so on boarding doesn't happen again
     private fun savePrefsData() {
         val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        pref.edit().putBoolean("isIntroOpnend", true).apply()
+        pref.edit().putBoolean("openedBefore", true).apply()
     }
 }
