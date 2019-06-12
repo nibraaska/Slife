@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="next_btn">Next</string>
+    <string name="prev_btn">Prev</string>
+    <string name="login_btn">Login</string>
+    <string name="register_btn">Register</string>
+    <string name="skip_btn">Skip</string>
 </resources>
