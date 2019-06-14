@@ -1,4 +1,4 @@
-package com.nibraas.slife
+package com.nibraas.slife.BottomNavigation
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nibraas.slife.R
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -17,14 +18,14 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class UniversitiesFragment : Fragment() {
+class MessagesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_universities, container, false)
+        return inflater.inflate(R.layout.fragment_messages, container, false)
     }
 
 
