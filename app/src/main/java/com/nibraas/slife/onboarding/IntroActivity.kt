@@ -43,13 +43,6 @@ class IntroActivity: AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        // Checks to see if this has been opened before
-        if (restorePrefData()) {
-            val mainActivity = Intent(applicationContext, MainActivity::class.java)
-            startActivity(mainActivity)
-            finish()
-        }
-
         setContentView(R.layout.activity_intro)
 
         // Hides action bar
@@ -154,12 +147,6 @@ class IntroActivity: AppCompatActivity() {
             screenPager!!.currentItem = mList.size
             loadLastScreen()
         }
-    }
-
-    // Checks prefs for open key
-    private fun restorePrefData(): Boolean {
-        val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        return pref.getBoolean("openedBefore", false)
     }
 
     // Last page set up
