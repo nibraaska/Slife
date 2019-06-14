@@ -5,19 +5,19 @@
             app:startDestination="@id/navigation_home">
 
     <fragment android:id="@+id/navigation_home"
-              android:name="com.nibraas.slife.HomeFragment"
+              android:name="com.nibraas.slife.BottomNavigation.HomeFragment"
               android:label="Home"
               tools:layout="@layout/fragment_home"/>
     <fragment android:id="@+id/navigation_universities"
-              android:name="com.nibraas.slife.UniversitiesFragment"
+              android:name="com.nibraas.slife.BottomNavigation.UniversitiesFragment"
               android:label="Universities"
               tools:layout="@layout/fragment_universities"/>
     <fragment android:id="@+id/navigation_messages"
-              android:name="com.nibraas.slife.MessagesFragment"
+              android:name="com.nibraas.slife.BottomNavigation.MessagesFragment"
               android:label="Messages"
               tools:layout="@layout/fragment_messages"/>
     <fragment android:id="@+id/navigation_profile"
-              android:name="com.nibraas.slife.ProfileFragment"
+              android:name="com.nibraas.slife.BottomNavigation.ProfileFragment"
               android:label="Profile"
               tools:layout="@layout/fragment_profile"/>
 </navigation>
