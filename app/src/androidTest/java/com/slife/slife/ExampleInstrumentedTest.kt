@@ -1,4 +1,4 @@
-package com.nibraas.slife
+package com.slife.slife
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

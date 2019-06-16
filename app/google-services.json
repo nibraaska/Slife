@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:478280677534:android:45c4445933e41e1f",
+        "mobilesdk_app_id": "1:478280677534:android:8e3c22709578be62",
         "android_client_info": {
-          "package_name": "com.nibraas.slife"
+          "package_name": "com.slife.slife"
         }
       },
       "oauth_client": [
         {
-          "client_id": "478280677534-84f6r7ob3vn174u2i5cei77jd780vn4s.apps.googleusercontent.com",
+          "client_id": "478280677534-82f2bmfep53m6ml313bq1drn9abvag5e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.nibraas.slife",
+            "package_name": "com.slife.slife",
             "certificate_hash": "d649f7096d0e1829fc8e5d54619f2019449aa387"
           }
         },

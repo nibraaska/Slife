@@ -1,4 +1,4 @@
-package com.nibraas.slife.onboarding
+package com.slife.slife.onboarding
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
-import com.nibraas.slife.R
+import com.slife.slife.R
 
 class IntroViewPagerAdapter(private var mContext: Context, private var mListScreen: List<ScreenItem>) : PagerAdapter() {
 

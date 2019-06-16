@@ -1,4 +1,4 @@
-package com.nibraas.slife.BottomNavigation
+package com.slife.slife.BottomNavigation
 
 
 import android.os.Bundle
@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nibraas.slife.R
+import com.slife.slife.R
 
 
 // TODO: Rename parameter arguments, choose names that match
