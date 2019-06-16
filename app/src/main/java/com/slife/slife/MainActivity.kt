@@ -1,4 +1,4 @@
-package com.nibraas.slife
+package com.slife.slife
 
 import android.content.Context
 import android.content.Intent
@@ -11,7 +11,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.nibraas.slife.onboarding.IntroActivity
+import com.slife.slife.R
+import com.slife.slife.onboarding.IntroActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

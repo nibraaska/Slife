@@ -1,4 +1,4 @@
-package com.nibraas.slife.onboarding
+package com.slife.slife.onboarding
 
 import android.content.Context
 import android.content.Intent
@@ -15,8 +15,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.nibraas.slife.MainActivity
-import com.nibraas.slife.R
+import com.slife.slife.MainActivity
+import com.slife.slife.R
 import java.util.ArrayList
 import kotlin.math.log
 
@@ -59,10 +59,34 @@ class IntroActivity: AppCompatActivity() {
 
         // Initializes what to display on pages
         val mList = ArrayList<ScreenItem>()
-        mList.add(ScreenItem("Make friends", "It's never been easier to make friends from worldwide universities.", R.drawable.logoonboarding))
-        mList.add(ScreenItem("Connect","Find your university and start following the students life and all the news about it.", R.drawable.universitesonboarding))
-        mList.add(ScreenItem("Share","Share your student life with friends and others or go leave a like or comment on friends post", R.drawable.travelonboarding))
-        mList.add(ScreenItem("Talk","Start a conversation with a friend or a group", R.drawable.textonboarding))
+        mList.add(
+            ScreenItem(
+                "Make friends",
+                "It's never been easier to make friends from worldwide universities.",
+                R.drawable.logoonboarding
+            )
+        )
+        mList.add(
+            ScreenItem(
+                "Connect",
+                "Find your university and start following the students life and all the news about it.",
+                R.drawable.universitesonboarding
+            )
+        )
+        mList.add(
+            ScreenItem(
+                "Share",
+                "Share your student life with friends and others or go leave a like or comment on friends post",
+                R.drawable.travelonboarding
+            )
+        )
+        mList.add(
+            ScreenItem(
+                "Talk",
+                "Start a conversation with a friend or a group",
+                R.drawable.textonboarding
+            )
+        )
 
         // Setup viewpager
         screenPager = findViewById(R.id.screen_viewpager)

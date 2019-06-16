@@ -152,7 +152,7 @@ def scrape_read(write_file, main_str, is_first, count):
                 other_locations = ""
 
 
-            write_file.write("\t\t \"pk\": \"" + str(count) + "\",\n")
+            # write_file.write("\t\t \"pk\": \"" + str(count) + "\",\n")
             write_file.write("\t\t \"name\": \"" + clean_string(name) + "\",\n")
             write_file.write("\t\t \"link\": \"" + clean_string(link) + "\",\n")
             write_file.write("\t\t \"description\": \"" + clean_string(description) + "\",\n")

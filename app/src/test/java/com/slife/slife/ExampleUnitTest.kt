@@ -1,4 +1,4 @@
-package com.nibraas.slife
+package com.slife.slife
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
