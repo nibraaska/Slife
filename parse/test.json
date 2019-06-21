@@ -1,0 +1,54 @@
+{
+    "colleges": {
+        "United States" :
+            {
+                "University of West Yangon" : {
+                    "name": "University of West Yangon",
+                    "link": "https://www.4icu.org/reviews/14535.htm",
+                    "description": "Founded in 2002, University of West Yangon is a public higher education institution located in the large town of Htantabin (population range of 50,000-249,999 inhabitants), Yangon. Officially accredited and/or recognized by the Department of Higher Education of the Ministry of Education, Myanmar, University of West Yangon (UWY) is a large (uniRank enrollment range: 10,000-14,999 students) coeducational higher education institution. University of West Yangon (UWY) offers courses and programs leading to officially recognized higher education degrees in several areas of study. See the uniRank degree levels and areas of study matrix below for further details.",
+                    "acronym": "UWY",
+                    "foundingDate": "2002",
+                    "streetAddress": "",
+                    "addressLocality": "Htantabin (population range: 50,000-249,999)",
+                    "postalCode": "11393",
+                    "addressRegion": "Yangon",
+                    "otherlocations": "",
+                    "motto": "To develop the knowledge for benefit of the country",
+                    "colors": "",
+                    "country": "Myanmar",
+                    "telephone": "+95",
+                    "fax": "+95",
+                    "facebook": "",
+                    "twitter": "",
+                    "linkedin": "",
+                    "youtube": "",
+                    "instagram": ""
+                }
+            },
+            "States" :
+            {
+                "University of West London": {
+                    "name": "University of West London",
+                    "link": "https://www.4icu.org/reviews/4751.htm",
+                    "description": "Founded in 1990, University of West London is a non-profit public higher education institution located in the medium-sized town of Ealing (population range of 10,000-49,999 inhabitants), London. This institution has also branch campuses in the following location(s): Brentford. Officially accredited and/or recognized by the Privy Council, University of West London (UWL) is a large (uniRank enrollment range: 10,000-14,999 students) coeducational higher education institution. University of West London (UWL) offers courses and programs leading to officially recognized higher education degrees such as pre-bachelor degrees (i.e. certificates, diplomas, associate or foundation degrees), bachelor degrees, master degrees, doctorate degrees in several areas of study. See the uniRank degree levels and areas of study matrix below for further details. This 29 years old higher-education institution has a selective admission policy based on students' past academic record and grades. International students are welcome to apply for enrollment.",
+                    "acronym": "UWL",
+                    "foundingDate": "1990",
+                    "streetAddress": "St Mary's Road",
+                    "addressLocality": "Ealing (population range: 10,000-49,999)",
+                    "postalCode": "W5 5RF",
+                    "addressRegion": "London",
+                    "otherlocations": "Brentford",
+                    "motto": "",
+                    "colors": "",
+                    "country": "United Kingdom",
+                    "telephone": "+44 (20) 8231 2468",
+                    "fax": "+44 (20) 8566 1353",
+                    "facebook": "https://www.facebook.com/UniversityWestLondon/",
+                    "twitter": "https://twitter.com/UniWestLondon",
+                    "linkedin": "https://www.linkedin.com/school/university-of-west-london/",
+                    "youtube": "https://www.youtube.com/channel/UClm4aRKiqiIkFhX--H7bIKQ",
+                    "instagram": "https://www.instagram.com/uniwestlondon/"
+                }
+            }   
+    }
+}
