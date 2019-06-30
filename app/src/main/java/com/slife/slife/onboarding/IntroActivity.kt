@@ -1,10 +1,7 @@
 package com.slife.slife.onboarding
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -15,12 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.slife.slife.MainActivity
 import com.slife.slife.R
-import java.util.ArrayList
-import kotlin.math.log
+import java.util.*
 
-class IntroActivity: AppCompatActivity() {
+class   IntroActivity: AppCompatActivity() {
 
     private var screenPager: ViewPager? = null
     private lateinit var tabIndicator: TabLayout
@@ -37,16 +32,9 @@ class IntroActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Make it full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        setUp()
 
         setContentView(R.layout.activity_intro)
-
-        // Hides action bar
-        supportActionBar!!.hide()
 
         // initializes views
         btnNext = findViewById(R.id.btn_next)
@@ -152,17 +140,15 @@ class IntroActivity: AppCompatActivity() {
 
         // login listener
         login.setOnClickListener {
-            val mainActivity = Intent(applicationContext, MainActivity::class.java)
+            val mainActivity = Intent(applicationContext, LoginActivity::class.java)
             startActivity(mainActivity)
-            savePrefsData()
             finish()
         }
 
         // register listener
         register.setOnClickListener {
-            val mainActivity = Intent(applicationContext, MainActivity::class.java)
+            val mainActivity = Intent(applicationContext, RegisterActivity::class.java)
             startActivity(mainActivity)
-            savePrefsData()
             finish()
         }
 
@@ -190,9 +176,14 @@ class IntroActivity: AppCompatActivity() {
         first = false
     }
 
-    // Saves so on boarding doesn't happen again
-    private fun savePrefsData() {
-        val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        pref.edit().putBoolean("openedBefore", true).apply()
+    private fun setUp(){
+        // Make it full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+        // Hides action bar
+        supportActionBar!!.hide()
     }
 }
