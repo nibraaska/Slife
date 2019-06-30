@@ -4,6 +4,7 @@
                 android:orientation="vertical"
                 style="@style/loginParent"
                 tools:context="com.slife.slife.onboarding.RegisterActivity">
+
     <ScrollView
             style="@style/parent">
 

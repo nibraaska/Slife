@@ -36,7 +36,6 @@ class   IntroActivity: AppCompatActivity() {
 
         setContentView(R.layout.activity_intro)
 
-        // initializes views
         btnNext = findViewById(R.id.btn_next)
         btnPrev = findViewById(R.id.btn_prev)
         login = findViewById(R.id.btn_get_started_login)
@@ -45,7 +44,6 @@ class   IntroActivity: AppCompatActivity() {
         btnAnim = AnimationUtils.loadAnimation(applicationContext, R.anim.button_animation)
         tvSkip = findViewById(R.id.tv_skip)
 
-        // Initializes what to display on pages
         val mList = ArrayList<ScreenItem>()
         mList.add(
             ScreenItem(
@@ -76,15 +74,12 @@ class   IntroActivity: AppCompatActivity() {
             )
         )
 
-        // Setup viewpager
         screenPager = findViewById(R.id.screen_viewpager)
         introViewPagerAdapter = IntroViewPagerAdapter(this, mList)
         screenPager!!.adapter = introViewPagerAdapter
 
-        // Connect tab to viewpager
         tabIndicator.setupWithViewPager(screenPager)
 
-        // next button listener
         btnNext.setOnClickListener {
             position = screenPager!!.currentItem
             if (position < mList.size) {
@@ -97,7 +92,6 @@ class   IntroActivity: AppCompatActivity() {
             }
         }
 
-        // Back button listener
         btnPrev.setOnClickListener {
             position = screenPager!!.currentItem
             if (position < mList.size) {
@@ -107,10 +101,8 @@ class   IntroActivity: AppCompatActivity() {
             }
         }
 
-        // First screen prev btn
         btnPrev.visibility = View.INVISIBLE
 
-        // tab layout listener
         tabIndicator.addOnTabSelectedListener(object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
             override fun onTabReselected(p0: TabLayout.Tab?) {
                 if (p0 != null) {
@@ -138,28 +130,24 @@ class   IntroActivity: AppCompatActivity() {
             }
         })
 
-        // login listener
         login.setOnClickListener {
             val mainActivity = Intent(applicationContext, LoginActivity::class.java)
             startActivity(mainActivity)
             finish()
         }
 
-        // register listener
         register.setOnClickListener {
             val mainActivity = Intent(applicationContext, RegisterActivity::class.java)
             startActivity(mainActivity)
             finish()
         }
 
-        // skip button click listener
         tvSkip.setOnClickListener {
             screenPager!!.currentItem = mList.size
             loadLastScreen()
         }
     }
 
-    // Last page set up
     private fun loadLastScreen() {
         btnPrev.visibility = View.VISIBLE
         btnNext.visibility = View.INVISIBLE
@@ -168,7 +156,6 @@ class   IntroActivity: AppCompatActivity() {
         tvSkip.visibility = View.INVISIBLE
         tabIndicator.visibility = View.VISIBLE
 
-        // Setup animation
         if(first){
             login.animation = btnAnim
             register.animation = btnAnim
@@ -177,13 +164,10 @@ class   IntroActivity: AppCompatActivity() {
     }
 
     private fun setUp(){
-        // Make it full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
-        // Hides action bar
         supportActionBar!!.hide()
     }
 }

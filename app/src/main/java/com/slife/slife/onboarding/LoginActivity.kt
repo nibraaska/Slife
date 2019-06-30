@@ -35,17 +35,13 @@ class LoginActivity: AppCompatActivity() {
     }
 
     private fun setUp(){
-        // Make it full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
-
-        // Hides action bar
         supportActionBar!!.hide()
     }
 
-    // Saves so on boarding doesn't happen again
     private fun savePrefsData() {
         val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         pref.edit().putBoolean("openedBefore", true).apply()
