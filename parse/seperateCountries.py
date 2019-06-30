@@ -1,11 +1,12 @@
 def main():
     fp = open("colleges.json", encoding="utf8")
-    fp2 = open("collegesfixed.json",'w', encoding='utf-8')
+    fp2 = open("collegesdatabase.json",'w', encoding='utf-8')
 
     json_item = ""
     country = ""
     first = True
     firstLoop = True
+    firstList = True
     item_found = False
     countryList = []
     seperatedDict = {}
@@ -29,7 +30,7 @@ def main():
 
 
     fp2.write("{\n")
-    fp2.write("\t\"colleges\" : {\n")
+    fp2.write("\t\"Colleges\" : {\n")
     for key in sorted(seperatedDict):
         if first:
             fp2.write("\t\t\"" + key + "\" :\n \t\t\t{\n")
@@ -92,7 +93,17 @@ def main():
                             fp2.write("\t\t\t\t" + line.strip() + "\n")
 
             fp2.write("\t\t}")
-    fp2.write("\n\t}\n")
+    fp2.write("\n\t}")
+    fp2.write(",\n\t \"CountryList\" : { \n")
+    fp2.write("\t\t \"CountryList\" : [ \n")
+    for country in countryList:
+        if firstList:
+            fp2.write("\t\t\t" + "\"" + country + "\"")
+            firstList = False
+        else:
+            fp2.write(",\n\t\t\t" + "\"" + country + "\"")
+    fp2.write("\n\t\t]\n")
+    fp2.write("\t}\n")
     fp2.write("}")
 
 
