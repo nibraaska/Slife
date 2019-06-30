@@ -71,37 +71,35 @@ class RegisterActivity: AppCompatActivity() {
     }
 
     private fun checkFieldsAndCreate(){
-        val myEmail = email.text.toString()
-        val myPassword = password.text.toString()
-        val mycPassword = confirmPassword.text.toString()
-        val myName = name.text.toString()
-
-        if(myName.isEmpty()){
-            name.error = "Please enter your name"
-            name.requestFocus()
-        }
-        else if(myEmail.isEmpty()){
-            email.error = "Please enter your email"
-            email.requestFocus()
-        }
-        else if(!Patterns.EMAIL_ADDRESS.matcher(myEmail).matches()){
-            email.error = "Please enter a valid email"
-            email.requestFocus()
-        }
-        else if(myPassword.isEmpty()){
-            password.error = "Please enter your password"
-            password.requestFocus()
-        }
-        else if(mycPassword.isEmpty()){
-            confirmPassword.error = "Please enter your password again"
-            confirmPassword.requestFocus()
-        }
-        else if(myPassword != mycPassword){
-            confirmPassword.error = "Passwords need to match"
-            confirmPassword.requestFocus()
-        } else {
-            pb.visibility = View.VISIBLE
-            createUser()
+        when {
+            name.text.toString().isEmpty() -> {
+                name.error = "Please enter your name"
+                name.requestFocus()
+            }
+            email.text.toString().isEmpty() -> {
+                email.error = "Please enter your email"
+                email.requestFocus()
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email.text.toString()).matches() -> {
+                email.error = "Please enter a valid email"
+                email.requestFocus()
+            }
+            password.text.toString().isEmpty() -> {
+                password.error = "Please enter your password"
+                password.requestFocus()
+            }
+            confirmPassword.text.toString().isEmpty() -> {
+                confirmPassword.error = "Please enter your password again"
+                confirmPassword.requestFocus()
+            }
+            password.text.toString() != confirmPassword.text.toString() -> {
+                confirmPassword.error = "Passwords need to match"
+                confirmPassword.requestFocus()
+            }
+            else -> {
+                pb.visibility = View.VISIBLE
+                createUser()
+            }
         }
     }
 
@@ -113,7 +111,7 @@ class RegisterActivity: AppCompatActivity() {
                 pb.visibility = View.GONE
                 if (p0.isSuccessful) {
                     savePrefsData()
-                    Toast.makeText(this@RegisterActivity, "createUserWithEmail:", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "createUserWithEmail", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this@RegisterActivity, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
