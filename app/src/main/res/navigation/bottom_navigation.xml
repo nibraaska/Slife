@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/bottom_navigation"
+            app:startDestination="@id/navigation_home">
+
+    <fragment android:id="@+id/navigation_home"
+              android:name="com.slife.slife.BottomNavigation.HomeFragment"
+              android:label="Home"
+              tools:layout="@layout/fragment_home"/>
+    <fragment android:id="@+id/navigation_universities"
+              android:name="com.slife.slife.BottomNavigation.UniversitiesFragment"
+              android:label="Universities"
+              tools:layout="@layout/fragment_universities"/>
+    <fragment android:id="@+id/navigation_messages"
+              android:name="com.slife.slife.BottomNavigation.MessagesFragment"
+              android:label="Messages"
+              tools:layout="@layout/fragment_messages"/>
+    <fragment android:id="@+id/navigation_profile"
+              android:name="com.slife.slife.BottomNavigation.ProfileFragment"
+              android:label="Profile"
+              tools:layout="@layout/fragment_profile"/>
+</navigation>

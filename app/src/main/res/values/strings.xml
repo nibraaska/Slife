@@ -1,6 +1,23 @@
 <resources>
     <string name="app_name">Slife</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="next_btn">Next</string>
+    <string name="prev_btn">Prev</string>
+    <string name="login_btn">Login</string>
+    <string name="register_btn">Register</string>
+    <string name="skip_btn">Skip</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_universities">Universities</string>
+    <string name="title_messages">Messages</string>
+    <string name="title_profile">Profile</string>
+
+
+    <string name="register">REGISTER</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_password_confirm_hint">Confirm Password</string>
+    <string name="signup_login_hint">Already have an account? Sign In</string>
+    <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
 </resources>
