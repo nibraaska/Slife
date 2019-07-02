@@ -1,10 +1,7 @@
 package com.slife.slife.onboarding
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -15,12 +12,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import com.slife.slife.MainActivity
 import com.slife.slife.R
-import java.util.ArrayList
-import kotlin.math.log
+import java.util.*
 
-class IntroActivity: AppCompatActivity() {
+class   IntroActivity: AppCompatActivity() {
 
     private var screenPager: ViewPager? = null
     private lateinit var tabIndicator: TabLayout
@@ -37,18 +32,10 @@ class IntroActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Make it full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        setUp()
 
         setContentView(R.layout.activity_intro)
 
-        // Hides action bar
-        supportActionBar!!.hide()
-
-        // initializes views
         btnNext = findViewById(R.id.btn_next)
         btnPrev = findViewById(R.id.btn_prev)
         login = findViewById(R.id.btn_get_started_login)
@@ -57,7 +44,6 @@ class IntroActivity: AppCompatActivity() {
         btnAnim = AnimationUtils.loadAnimation(applicationContext, R.anim.button_animation)
         tvSkip = findViewById(R.id.tv_skip)
 
-        // Initializes what to display on pages
         val mList = ArrayList<ScreenItem>()
         mList.add(
             ScreenItem(
@@ -88,15 +74,12 @@ class IntroActivity: AppCompatActivity() {
             )
         )
 
-        // Setup viewpager
         screenPager = findViewById(R.id.screen_viewpager)
         introViewPagerAdapter = IntroViewPagerAdapter(this, mList)
         screenPager!!.adapter = introViewPagerAdapter
 
-        // Connect tab to viewpager
         tabIndicator.setupWithViewPager(screenPager)
 
-        // next button listener
         btnNext.setOnClickListener {
             position = screenPager!!.currentItem
             if (position < mList.size) {
@@ -109,7 +92,6 @@ class IntroActivity: AppCompatActivity() {
             }
         }
 
-        // Back button listener
         btnPrev.setOnClickListener {
             position = screenPager!!.currentItem
             if (position < mList.size) {
@@ -119,10 +101,8 @@ class IntroActivity: AppCompatActivity() {
             }
         }
 
-        // First screen prev btn
         btnPrev.visibility = View.INVISIBLE
 
-        // tab layout listener
         tabIndicator.addOnTabSelectedListener(object : TabLayout.BaseOnTabSelectedListener<TabLayout.Tab> {
             override fun onTabReselected(p0: TabLayout.Tab?) {
                 if (p0 != null) {
@@ -150,30 +130,26 @@ class IntroActivity: AppCompatActivity() {
             }
         })
 
-        // login listener
         login.setOnClickListener {
-            val mainActivity = Intent(applicationContext, MainActivity::class.java)
-            startActivity(mainActivity)
-            savePrefsData()
+            val loginActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
+            loginActivity.putExtra("action", "login")
+            startActivity(loginActivity)
             finish()
         }
 
-        // register listener
         register.setOnClickListener {
-            val mainActivity = Intent(applicationContext, MainActivity::class.java)
-            startActivity(mainActivity)
-            savePrefsData()
+            val registerActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
+            registerActivity.putExtra("action", "register")
+            startActivity(registerActivity)
             finish()
         }
 
-        // skip button click listener
         tvSkip.setOnClickListener {
             screenPager!!.currentItem = mList.size
             loadLastScreen()
         }
     }
 
-    // Last page set up
     private fun loadLastScreen() {
         btnPrev.visibility = View.VISIBLE
         btnNext.visibility = View.INVISIBLE
@@ -182,7 +158,6 @@ class IntroActivity: AppCompatActivity() {
         tvSkip.visibility = View.INVISIBLE
         tabIndicator.visibility = View.VISIBLE
 
-        // Setup animation
         if(first){
             login.animation = btnAnim
             register.animation = btnAnim
@@ -190,9 +165,11 @@ class IntroActivity: AppCompatActivity() {
         first = false
     }
 
-    // Saves so on boarding doesn't happen again
-    private fun savePrefsData() {
-        val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        pref.edit().putBoolean("openedBefore", true).apply()
+    private fun setUp(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        supportActionBar!!.hide()
     }
 }
