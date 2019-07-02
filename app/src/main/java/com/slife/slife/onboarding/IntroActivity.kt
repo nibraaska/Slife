@@ -131,17 +131,13 @@ class   IntroActivity: AppCompatActivity() {
         })
 
         login.setOnClickListener {
-            val loginActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
-            loginActivity.putExtra("action", "login")
-            startActivity(loginActivity)
-            finish()
+            startActivity(Intent(applicationContext, LoginRegisterActivity::class.java)
+                .putExtra("action", "login"))
         }
 
         register.setOnClickListener {
-            val registerActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
-            registerActivity.putExtra("action", "register")
-            startActivity(registerActivity)
-            finish()
+            startActivity(Intent(applicationContext, LoginRegisterActivity::class.java)
+                .putExtra("action", "register"))
         }
 
         tvSkip.setOnClickListener {
