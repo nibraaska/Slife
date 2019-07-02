@@ -50,7 +50,12 @@
                         android:layout_marginTop="40dp"/>
 
                 <ViewStub
-                        android:id="@+id/layout_stub"
+                        android:id="@+id/login_stub"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                <ViewStub
+                        android:id="@+id/register_stub"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 

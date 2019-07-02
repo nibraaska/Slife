@@ -18,8 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.slife.slife.onboarding.IntroActivity"/>
-        <activity android:name="com.slife.slife.onboarding.RegisterActivity"/>
-        <activity android:name="com.slife.slife.onboarding.LoginActivity"/>
+        <activity android:name="com.slife.slife.onboarding.LoginRegisterActivity"/>
     </application>
 
 </manifest>
