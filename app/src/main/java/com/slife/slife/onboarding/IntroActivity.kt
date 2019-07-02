@@ -131,13 +131,15 @@ class   IntroActivity: AppCompatActivity() {
         })
 
         login.setOnClickListener {
-            val loginActivity = Intent(applicationContext, LoginActivity::class.java)
+            val loginActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
+            loginActivity.putExtra("action", "login")
             startActivity(loginActivity)
             finish()
         }
 
         register.setOnClickListener {
-            val registerActivity = Intent(applicationContext, RegisterActivity::class.java)
+            val registerActivity = Intent(applicationContext, LoginRegisterActivity::class.java)
+            registerActivity.putExtra("action", "register")
             startActivity(registerActivity)
             finish()
         }
