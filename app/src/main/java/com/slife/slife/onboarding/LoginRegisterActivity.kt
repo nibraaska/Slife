@@ -1,6 +1,7 @@
 package com.slife.slife.onboarding
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.slife.slife.MainActivity
 import com.slife.slife.R
 
 
@@ -109,13 +111,17 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun checkFieldsAndLogin() {
+
+        val email = loginEmail.text.toString().trim()
+        val password = loginPassword.text.toString().trim()
+
         when {
-            loginEmail.text.toString().isEmpty() -> {
-                loginEmail.error = "Please enter your loginEmail"
+            email.isEmpty() -> {
+                loginEmail.error = "Please enter your Email"
                 loginEmail.requestFocus()
             }
-            loginPassword.text.toString().isEmpty() -> {
-                loginPassword.error = "Please enter your loginPassword"
+            password.isEmpty() -> {
+                loginPassword.error = "Please enter your Password"
                 loginPassword.requestFocus()
             }
             else -> {
@@ -125,28 +131,38 @@ class LoginRegisterActivity : AppCompatActivity() {
     }
 
     private fun checkFieldsAndCreateUser() {
+
+        val name = registerName.text.toString().trim()
+        val email = registerEmail.text.toString().trim()
+        val password = registerPassword.text.toString().trim()
+        val cPassword = registerConfirmPassword.text.toString().trim()
+
         when {
-            registerName.text.toString().isEmpty() -> {
-                registerName.error = "Please enter your registerName"
+            name.isEmpty() -> {
+                registerName.error = "Please enter your Name"
                 registerName.requestFocus()
             }
-            registerEmail.text.toString().isEmpty() -> {
-                registerEmail.error = "Please enter your registerEmail"
+            email.isEmpty() -> {
+                registerEmail.error = "Please enter your Email"
                 registerEmail.requestFocus()
             }
-            !Patterns.EMAIL_ADDRESS.matcher(registerEmail.text.toString()).matches() -> {
-                registerEmail.error = "Please enter a valid registerEmail"
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                registerEmail.error = "Please enter a valid Email"
                 registerEmail.requestFocus()
             }
-            registerPassword.text.toString().isEmpty() -> {
-                registerPassword.error = "Please enter your registerPassword"
+            !email.endsWith("edu") -> {
+                registerEmail.error = "Please enter your school email"
+                registerEmail.requestFocus()
+            }
+            password.isEmpty() -> {
+                registerPassword.error = "Please enter your Password"
                 registerPassword.requestFocus()
             }
-            registerConfirmPassword.text.toString().isEmpty() -> {
-                registerConfirmPassword.error = "Please enter your registerPassword again"
+            cPassword.isEmpty() -> {
+                registerConfirmPassword.error = "Please enter your Password again"
                 registerConfirmPassword.requestFocus()
             }
-            registerPassword.text.toString() != registerConfirmPassword.text.toString() -> {
+            password != cPassword -> {
                 registerConfirmPassword.error = "Passwords need to match"
                 registerConfirmPassword.requestFocus()
             }
@@ -165,6 +181,7 @@ class LoginRegisterActivity : AppCompatActivity() {
                 if (p0.isSuccessful) {
                     savePrefsData()
                     Toast.makeText(this, "Logged in as ${loginEmail.text}", Toast.LENGTH_SHORT).show()
+                    mainActivityIntent()
                 } else {
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
@@ -181,14 +198,18 @@ class LoginRegisterActivity : AppCompatActivity() {
                 if (p0.isSuccessful) {
                     savePrefsData()
                     Toast.makeText(this, "createUserWithEmail", Toast.LENGTH_SHORT).show()
+                    mainActivityIntent()
                 } else {
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
+    private fun mainActivityIntent(){
+        startActivity(Intent(this,MainActivity::class.java))
+    }
+
     private fun savePrefsData() {
-        val pref = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        pref.edit().putBoolean("openedBefore", true).apply()
+        applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE).edit().putBoolean("openedBefore", true).apply()
     }
 }
