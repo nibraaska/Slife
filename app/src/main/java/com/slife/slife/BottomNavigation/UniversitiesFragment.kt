@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_universities.*
 class UniversitiesFragment : Fragment() {
 
     private lateinit var countryListRef: DatabaseReference
+    private lateinit var collegesRef: DatabaseReference
 
     private lateinit var countryMenuText: TextView
     private lateinit var countryMenu: PopupMenu
@@ -47,20 +48,28 @@ class UniversitiesFragment : Fragment() {
             .child("CountryList")
             .child("CountryList")
 
-        countryListRef.addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(p0: DatabaseError) {
-            }
+        collegesRef = FirebaseDatabase.getInstance().reference
+            .child("Colleges")
 
+        countryListRef.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {}
             override fun onDataChange(p0: DataSnapshot) {
                 val list: ArrayList<String> = arrayListOf(p0.value)[0] as ArrayList<String>
                 for (country in list){
                     countryMenu.menu.add(country)
                 }
+                countryMenu.setOnMenuItemClickListener {
+                    collegesRef.child(it.toString())
+                        .addValueEventListener(object : ValueEventListener{
+                            override fun onCancelled(p0: DatabaseError) {}
+
+                            override fun onDataChange(p0: DataSnapshot) {
+                                Log.d("here", p0.toString())
+                            }
+                        })
+                    true
+                }
             }
-
         })
-
     }
-
-
 }
