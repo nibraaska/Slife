@@ -58,20 +58,19 @@ class UniversitiesFragment : Fragment() {
                     pb.visibility = View.GONE
                     countryAutoComplete.onItemClickListener =
                         AdapterView.OnItemClickListener { parent, _, position, _ ->
-                            Log.d("here", parent?.getItemAtPosition(position).toString())
                             collegesAutoComplete.visibility = View.VISIBLE
-                            getCollegesList()
+                            getCollegesList(parent.getItemAtPosition(position).toString())
                         }
                 }
             })
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getCollegesList() {
+    private fun getCollegesList(country: String) {
         pb.visibility = View.VISIBLE
         FirebaseDatabase.getInstance().reference
             .child("Colleges")
-            .child(countryAutoComplete.text.toString())
+            .child(country)
             .addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(p0: DatabaseError) {}
                 override fun onDataChange(p0: DataSnapshot) {
@@ -82,8 +81,25 @@ class UniversitiesFragment : Fragment() {
                     collegesAutoComplete.setAdapter(adapter)
                     collegesAutoComplete.onItemClickListener =
                         AdapterView.OnItemClickListener { parent, _, position, _ ->
-                            Log.d("here", parent?.getItemAtPosition(position).toString())
+                            getCollege(country, parent?.getItemAtPosition(position).toString())
                         }
+                }
+            })
+    }
+
+    private fun getCollege(country: String, college: String) {
+        Log.d("here", "$country, $college")
+        pb.visibility = View.VISIBLE
+        FirebaseDatabase.getInstance().reference
+            .child("Colleges")
+            .child(country)
+            .child(college)
+            .addValueEventListener(object: ValueEventListener{
+                override fun onCancelled(p0: DatabaseError) {}
+                override fun onDataChange(p0: DataSnapshot) {
+                    pb.visibility = View.GONE
+                    val map: Map<*, *> = p0.value as Map<*, *>
+                    Log.d("here", map["acronym"].toString())
                 }
             })
     }
