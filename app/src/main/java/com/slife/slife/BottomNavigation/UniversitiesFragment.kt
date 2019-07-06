@@ -2,30 +2,64 @@ package com.slife.slife.BottomNavigation
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Spinner
+import android.widget.TextView
+import com.google.firebase.database.*
 import com.slife.slife.R
+import kotlinx.android.synthetic.main.fragment_universities.*
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class UniversitiesFragment : Fragment() {
+
+    private lateinit var countryListRef: DatabaseReference
+
+    private lateinit var countryMenuText: TextView
+    private lateinit var countryMenu: PopupMenu
+
+    private lateinit var v: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_universities, container, false)
+        v = inflater.inflate(R.layout.fragment_universities, container, false)
+
+        countryMenuText = v.findViewById(R.id.universitiesList)
+        countryMenu = PopupMenu(this.context, countryMenuText)
+        countryMenuText.setOnClickListener {
+            countryMenu.show()
+        }
+
+        return v
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        countryListRef = FirebaseDatabase.getInstance().reference
+            .child("CountryList")
+            .child("CountryList")
+
+        countryListRef.addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                val list: ArrayList<String> = arrayListOf(p0.value)[0] as ArrayList<String>
+                for (country in list){
+                    countryMenu.menu.add(country)
+                }
+            }
+
+        })
+
     }
 
 
