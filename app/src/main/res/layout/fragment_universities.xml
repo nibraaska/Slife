@@ -11,4 +11,13 @@
             android:layout_height="match_parent"
             android:text="Universities Fragment"/>
 
+    <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/universitiesList"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Universities List"
+            android:textSize="15sp"
+            android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp"/>
+
 </FrameLayout>
