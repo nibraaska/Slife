@@ -1,12 +1,14 @@
 def main():
     fp = open("colleges.json", encoding="utf8")
     fp2 = open("collegesdatabase.json",'w', encoding='utf-8')
+    fp3 = open("collegeInCountry.json", 'w', encoding='utf-8')
 
     json_item = ""
     country = ""
     first = True
     firstLoop = True
     firstList = True
+    firstCollegesInCountryList = True
     item_found = False
     countryList = []
     seperatedDict = {}
@@ -31,10 +33,13 @@ def main():
 
     fp2.write("{\n")
     fp2.write("\t\"Colleges\" : {\n")
+    fp3.write("{\n")
     for key in sorted(seperatedDict):
         if first:
             fp2.write("\t\t\"" + key + "\" :\n \t\t\t{\n")
-
+            fp3.write("\t\"" + key + "\" : { \n")
+            fp3.write("\t\t\"Colleges\" : \n")
+            fp3.write("\t\t\t[ \n")
             firstLoop = True
             for item in seperatedDict[key]:
                 if firstLoop:
@@ -60,11 +65,21 @@ def main():
                             fp2.write("\t\t\t" + "}")
                         else:
                             fp2.write("\t\t\t\t" + line.strip() + "\n")
-            
+                if(firstCollegesInCountryList):
+                    fp3.write("\t\t\t\t\"" + name + "\"") 
+                    firstCollegesInCountryList = False
+                else:
+                    fp3.write(",\n\t\t\t\t\"" + name + "\"") 
+            fp3.write("\n\t\t\t] \n \t\t}")
             fp2.write("\t\t}")
             first = False
         else:
+            firstCollegesInCountryList = True
             fp2.write(",\t\t\"" + key + "\" :\n \t\t\t{\n")
+
+            fp3.write(",\t\"" + key + "\" : { \n")
+            fp3.write("\t\t\"Colleges\" : \n")
+            fp3.write("\t\t\t[ \n")
 
             firstLoop = True
             for item in seperatedDict[key]:
@@ -91,7 +106,12 @@ def main():
                             fp2.write("\t\t\t" + "}")
                         else:
                             fp2.write("\t\t\t\t" + line.strip() + "\n")
-
+                if(firstCollegesInCountryList):
+                    fp3.write("\t\t\t\t\"" + name + "\"") 
+                    firstCollegesInCountryList = False
+                else:
+                    fp3.write(",\n\t\t\t\t\"" + name + "\"") 
+            fp3.write("\n\t\t\t] \n \t\t}")
             fp2.write("\t\t}")
     fp2.write("\n\t}")
     fp2.write(",\n\t \"CountryList\" : { \n")
@@ -103,7 +123,15 @@ def main():
         else:
             fp2.write(",\n\t\t\t" + "\"" + country + "\"")
     fp2.write("\n\t\t]\n")
-    fp2.write("\t}\n")
+    fp3.write("}")
+    fp3.close()
+
+    fp4 = open("collegeInCountry.json", 'r', encoding='utf-8')
+    fp2.write("\t},\"CollegesInCountry\" : ")
+
+    for line in fp4:
+        fp2.write("\t\t" + line)
+
     fp2.write("}")
 
 

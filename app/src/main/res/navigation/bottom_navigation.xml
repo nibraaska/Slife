@@ -9,7 +9,7 @@
               android:label="Home"
               tools:layout="@layout/fragment_home"/>
     <fragment android:id="@+id/navigation_universities"
-              android:name="com.slife.slife.BottomNavigation.Universities.UniversitiesFragment"
+              android:name="com.slife.slife.BottomNavigation.Universities.View.UniversitiesFragment"
               android:label="Universities"
               tools:layout="@layout/fragment_universities"/>
     <fragment android:id="@+id/navigation_messages"

@@ -7,4 +7,7 @@ import retrofit2.http.GET
 interface Endpoints {
     @GET("CountryList/.json")
     fun getCountryList(): Call<CountryList>
+
+//    @GET("Colleges/{country}/.json")
+//    fun getCollegesInCountry(): Call<>
 }
