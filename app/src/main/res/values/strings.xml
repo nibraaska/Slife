@@ -20,4 +20,6 @@
     <string name="login_password_confirm_hint">Confirm Password</string>
     <string name="signup_login_hint">Already have an account? Sign In</string>
     <string name="login_signup_hint">Don\'t have an account? Sign Up</string>
+
+    <string name="BASE_URL">https://studyout-5e59e.firebaseio.com/</string>
 </resources>
