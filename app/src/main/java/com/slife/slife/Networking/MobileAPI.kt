@@ -1,6 +1,5 @@
 package com.slife.slife.Networking
 
-import android.util.Log
 import com.slife.slife.BottomNavigation.Universities.Models.College
 import com.slife.slife.BottomNavigation.Universities.Models.CollegesInCountry
 import com.slife.slife.BottomNavigation.Universities.Models.CountryList

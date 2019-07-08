@@ -83,4 +83,8 @@ data class College (
     @SerializedName("youtube")
     @Expose
     val youtube: String
-)
+){
+    constructor() : this("","","", "", "", "", "",
+        "","","", "", "", "", "",
+        "", "", "", "", "", "")
+}

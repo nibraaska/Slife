@@ -14,6 +14,6 @@ interface Endpoints {
     @GET("CollegesInCountry/{country}/.json")
     fun getCollegesInCountry(@Path("country") country: String): Call<CollegesInCountry>
 
-    @GET("CollegesInCountry/{country}/{college}/.json")
+    @GET("Colleges/{country}/{college}/.json")
     fun getCollege(@Path("country") country: String, @Path("college") college: String): Call<College>
 }
