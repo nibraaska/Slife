@@ -23,12 +23,13 @@ class CollegesInCountryViewModel(application: Application) : AndroidViewModel(ap
         return status
     }
 
-    fun getCollegeInCountry(country: String): LiveData<CollegesInCountry>{
+    fun getCollegesInCountry(country: String): MutableLiveData<CollegesInCountry>{
         status.value = Status.LOADING
         mAPI.getCollegesInCountry(country, object : MobileCallBack<CollegesInCountry>{
             override fun success(data: CollegesInCountry) {
                 status.value = Status.COMPLETE
                 collegesInCountry.value = data
+                Log.d("here", collegesInCountry.value.toString())
             }
 
             override fun failure(message: String) {

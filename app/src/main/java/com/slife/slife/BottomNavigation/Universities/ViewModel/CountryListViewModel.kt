@@ -27,12 +27,11 @@ class CountryListViewModel(application: Application) : AndroidViewModel(applicat
         status.value = Status.LOADING
         mAPI.getCountryList(object : MobileCallBack<CountryList> {
             override fun success(data: CountryList) {
-                status.value = Status.COMPLETE
                 countryList.value = data
+                status.value = Status.COMPLETE
             }
             override fun failure(message: String) {
                 status.value = Status.FAILED
-                Log.d("vm", message)
             }
         })
         return countryList

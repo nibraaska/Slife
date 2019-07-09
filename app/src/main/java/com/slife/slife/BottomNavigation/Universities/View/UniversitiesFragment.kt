@@ -6,8 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -41,6 +40,9 @@ class UniversitiesFragment : Fragment() {
     private lateinit var collegeObserver: ((College) -> Unit)
     private lateinit var collegeStatusObserver: ((CollegeViewModel.Status) -> Unit)
 
+    private lateinit var countrySelected: String
+    private lateinit var collegeSelected: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,22 +60,46 @@ class UniversitiesFragment : Fragment() {
         setUpCollegesInCountryList()
         setUpCollegeObserver()
 
-        collegesInCountryListViewModel.getCollegeInCountry("United States")
-        collegeViewModel.getCollege("United States", "Middle Tennessee State University")
+        setOnClickListeners()
 
         return view
+    }
+
+    private fun setOnClickListeners(){
+        countryAutoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                collegesAutoComplete.visibility = View.VISIBLE
+                countrySelected = parent?.getItemAtPosition(position).toString()
+                collegesInCountryListViewModel.getCollegesInCountry(countrySelected)
+            }
+
+        collegesAutoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener{ parent, _, position, _ ->
+                collegeSelected = parent?.getItemAtPosition(position).toString()
+                collegeViewModel.getCollege(countrySelected, collegeSelected)
+            }
+
     }
 
     private fun setUpCountryList() {
         countryListObserver = {
             catalogs: CountryList ->
-            run { this.countryList = catalogs }
+            run {
+                this.countryList = catalogs
+                countryAutoComplete.setAdapter(ArrayAdapter(context!!, android.R.layout.simple_dropdown_item_1line, this.countryList.countryList))
+            }
         }
         countryListStatusObserver = {
             when(it){
-                CountryListViewModel.Status.COMPLETE -> Log.d("Country List Status", countryList.countryList.toString())
-                CountryListViewModel.Status.LOADING -> Log.d("Country List Status", "loading")
-                CountryListViewModel.Status.FAILED -> Log.d("Country List Status", "failed")
+                CountryListViewModel.Status.COMPLETE -> {
+                    Log.d("Country List Status", "COMPLETE" + countryList.countryList.toString())
+                    pb.visibility = View.GONE
+                }
+                CountryListViewModel.Status.LOADING -> {
+                    Log.d("Country List Status", "LOADING")
+                    pb.visibility = View.VISIBLE
+                }
+                CountryListViewModel.Status.FAILED -> Log.d("Country List Status", "FAILED")
             }
         }
         countryListViewModel = ViewModelProviders.of(activity!!).get(CountryListViewModel::class.java)
@@ -86,18 +112,27 @@ class UniversitiesFragment : Fragment() {
     private fun setUpCollegesInCountryList(){
         collegesInCountryListObserver = {
             collegesInCountry: CollegesInCountry ->
-            run { this.collegesInCountryList = collegesInCountry }
+            run {
+                this.collegesInCountryList = collegesInCountry
+                collegesAutoComplete.setAdapter(ArrayAdapter(context!!, android.R.layout.simple_dropdown_item_1line, this.collegesInCountryList.collegeList))
+            }
         }
         collegesInCountryListStatusObserver = {
             when(it){
-                CollegesInCountryViewModel.Status.COMPLETE -> Log.d("Colleges List Status", this.collegesInCountryList.collegeList.toString())
-                CollegesInCountryViewModel.Status.LOADING -> Log.d("Colleges List Status", "loading")
-                CollegesInCountryViewModel.Status.FAILED -> Log.d("Colleges List Status", "failed")
+                CollegesInCountryViewModel.Status.COMPLETE -> {
+                    pb.visibility = View.GONE
+                    Log.d("Colleges List Status", "COMPLETE")
+                }
+                CollegesInCountryViewModel.Status.LOADING -> {
+                    pb.visibility = View.VISIBLE
+                    Log.d("Colleges List Status", "LOADING")
+                }
+                CollegesInCountryViewModel.Status.FAILED -> Log.d("Colleges List Status", "FAILED")
             }
         }
         collegesInCountryListViewModel = ViewModelProviders.of(activity!!).get(CollegesInCountryViewModel::class.java)
         collegesInCountryListViewModel.let {
-            it.getCollegeInCountry("").observe(viewLifecycleOwner, Observer(collegesInCountryListObserver))
+            it.getCollegesInCountry("").observe(viewLifecycleOwner, Observer(collegesInCountryListObserver))
             it.getStatus().observe(viewLifecycleOwner, Observer(collegesInCountryListStatusObserver))
         }
     }
@@ -105,13 +140,23 @@ class UniversitiesFragment : Fragment() {
     private fun setUpCollegeObserver(){
         collegeObserver = {
             college: College ->
-            run { this.college = college }
+            run {
+                this.college = college
+                Toast.makeText(context, this.college.toString(), Toast.LENGTH_LONG).show()
+                Log.d("College", this.college.toString())
+            }
         }
         collegeStatusObserver = {
             when(it){
-                CollegeViewModel.Status.COMPLETE -> Log.d("College", this.college.toString())
-                CollegeViewModel.Status.LOADING -> Log.d("College", "loading")
-                CollegeViewModel.Status.FAILED -> Log.d("College", "failed")
+                CollegeViewModel.Status.COMPLETE -> {
+                    Log.d("College", "COMPLETE")
+                    pb.visibility = View.GONE
+                }
+                CollegeViewModel.Status.LOADING -> {
+                    Log.d("College", "LOADING")
+                    pb.visibility = View.VISIBLE
+                }
+                CollegeViewModel.Status.FAILED -> Log.d("College", "FAILED")
             }
         }
         collegeViewModel = ViewModelProviders.of(activity!!).get(CollegeViewModel::class.java)
