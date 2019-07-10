@@ -1,8 +1,15 @@
 package com.slife.slife.onboarding
 
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Patterns
 import android.view.View
 import android.view.ViewStub
@@ -11,8 +18,13 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.slife.slife.MainActivity
 import com.slife.slife.R
+import java.io.ByteArrayOutputStream
+import android.graphics.BitmapFactory
+
+
 
 
 class LoginRegisterActivity : AppCompatActivity() {
@@ -24,19 +36,32 @@ class LoginRegisterActivity : AppCompatActivity() {
     private lateinit var loginPb: ProgressBar
 
     private lateinit var registerBtn: Button
-    private lateinit var registerName: EditText
     private lateinit var registerEmail: EditText
     private lateinit var registerPassword: EditText
     private lateinit var registerConfirmPassword: EditText
     private lateinit var registerPb: ProgressBar
     private lateinit var registerSignIn: TextView
 
+    private lateinit var pictureSetUp: ImageView
+    private lateinit var nameSetUp: EditText
+    private lateinit var countrySetUp: EditText
+    private lateinit var continueBtn: Button
+    private lateinit var setUpPb: ProgressBar
+
     private lateinit var loginStub: ViewStub
     private lateinit var loginView: View
     private lateinit var registerStub: ViewStub
     private lateinit var registerView: View
+    private lateinit var setUpStub: ViewStub
+    private lateinit var setUpView: View
 
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var imageUri: Uri
+    private val PERMISSION_CODE = 1000
+    private val IMAGE_CAPTURE_CODE = 1001
+    private var bitmap: Bitmap? = null
+    private var outputStream = ByteArrayOutputStream()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,21 +74,91 @@ class LoginRegisterActivity : AppCompatActivity() {
         loginStub.layoutResource = R.layout.layout_login
         loginView = loginStub.inflate()
         setUpLogin(loginView)
+        loginView.visibility = View.GONE
 
         registerStub = findViewById(R.id.register_stub)
         registerStub.layoutResource = R.layout.layout_register
         registerView = registerStub.inflate()
         setUpRegister(registerView)
+        registerView.visibility = View.GONE
+
+        setUpStub = findViewById(R.id.setUp_stub)
+        setUpStub.layoutResource = R.layout.layout_account_set_up
+        setUpView = setUpStub.inflate()
+        setUpSetUp(setUpView)
+        setUpView.visibility = View.GONE
+
 
         when (intent.getStringExtra("action")) {
             "login" -> {
-                registerView.visibility = View.GONE
+                loginView.visibility = View.VISIBLE
             }
             "register" -> {
-                loginView.visibility = View.GONE
+                registerView.visibility = View.VISIBLE
             }
         }
     }
+
+    private fun setUpSetUp(inflatedView: View) {
+        inflatedView.let {
+            pictureSetUp = it.findViewById(R.id.profilePicture)
+            nameSetUp = it.findViewById(R.id.nameSetUp)
+            countrySetUp = it.findViewById(R.id.countrySetUp)
+            continueBtn = it.findViewById(R.id.setUpContinue)
+            setUpPb = it.findViewById(R.id.progressSetUp)
+        }
+
+        pictureSetUp.setOnClickListener {
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                val permission =
+                    arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                requestPermissions(permission, PERMISSION_CODE)
+            } else {
+                openCamera()
+            }
+        }
+
+        continueBtn.setOnClickListener {
+            checkFieldsAndSetAccount()
+        }
+    }
+
+    private fun openCamera() {
+        val values = ContentValues()
+        values.let {
+            it.put(MediaStore.Images.Media.TITLE, "Profile Picture")
+            it.put(MediaStore.Images.Media.DESCRIPTION, "Profile Picture")
+        }
+        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)!!
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera()
+                } else {
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK){
+            pictureSetUp.setImageURI(imageUri)
+            bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+        }
+    }
+
 
     private fun baseConfig() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -94,7 +189,6 @@ class LoginRegisterActivity : AppCompatActivity() {
     private fun setUpRegister(inflatedView: View) {
         inflatedView.let {
             registerBtn = it.findViewById(R.id.registerBtn)
-            registerName = it.findViewById(R.id.nameRegister)
             registerEmail = it.findViewById(R.id.emailRegister)
             registerPassword = it.findViewById(R.id.passwordRegister)
             registerConfirmPassword = it.findViewById(R.id.passwordRegisterConfirm)
@@ -103,12 +197,51 @@ class LoginRegisterActivity : AppCompatActivity() {
         }
         registerBtn.setOnClickListener {
             checkFieldsAndCreateUser()
+            registerView.visibility = View.GONE
+            setUpView.visibility = View.VISIBLE
         }
         registerSignIn.setOnClickListener {
             registerView.visibility = View.GONE
             loginView.visibility = View.VISIBLE
         }
     }
+
+    private fun checkFieldsAndSetAccount(){
+        val name = nameSetUp.text.toString().trim()
+        val country = countrySetUp.text.toString().trim()
+
+        when {
+            bitmap == null -> {
+                pictureSetUp.requestFocus()
+            }
+            name.isEmpty() -> {
+                nameSetUp.error = "Please enter your name"
+                nameSetUp.requestFocus()
+            }
+            country.isEmpty() -> {
+                countrySetUp.error = "Please choose your country"
+                countrySetUp.requestFocus()
+            }
+            else -> {
+                setUpPb.visibility = View.VISIBLE
+                saveData()
+                setUpPb.visibility = View.GONE
+                mainActivityIntent()
+            }
+        }
+
+    }
+
+    private fun saveData() {
+        val userID = FirebaseAuth.getInstance().currentUser?.uid
+        FirebaseDatabase.getInstance().reference.child("Users").child(userID!!).let {
+            it.child("Name").setValue(nameSetUp.text.toString())
+            it.child("Country").setValue(countrySetUp.text.toString())
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            it.child("Profile Picture").setValue(Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT))
+        }
+    }
+
 
     private fun checkFieldsAndLogin() {
 
@@ -132,16 +265,11 @@ class LoginRegisterActivity : AppCompatActivity() {
 
     private fun checkFieldsAndCreateUser() {
 
-        val name = registerName.text.toString().trim()
         val email = registerEmail.text.toString().trim()
         val password = registerPassword.text.toString().trim()
         val cPassword = registerConfirmPassword.text.toString().trim()
 
         when {
-            name.isEmpty() -> {
-                registerName.error = "Please enter your Name"
-                registerName.requestFocus()
-            }
             email.isEmpty() -> {
                 registerEmail.error = "Please enter your Email"
                 registerEmail.requestFocus()
@@ -198,18 +326,18 @@ class LoginRegisterActivity : AppCompatActivity() {
                 if (p0.isSuccessful) {
                     savePrefsData()
                     Toast.makeText(this, "createUserWithEmail", Toast.LENGTH_SHORT).show()
-                    mainActivityIntent()
                 } else {
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    private fun mainActivityIntent(){
-        startActivity(Intent(this,MainActivity::class.java))
+    private fun mainActivityIntent() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     private fun savePrefsData() {
-        applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE).edit().putBoolean("openedBefore", true).apply()
+        applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE).edit().putBoolean("openedBefore", true)
+            .apply()
     }
 }
