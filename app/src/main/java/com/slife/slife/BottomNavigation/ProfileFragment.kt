@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.slife.slife.MainActivity
 import com.slife.slife.R
@@ -41,9 +42,16 @@ class ProfileFragment : Fragment() {
 
         logoutBtn.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)?.edit()?.putBoolean("openedBefore", false)
-                ?.apply()
-            startActivity(Intent(context, LoginRegisterActivity::class.java).putExtra("action", "login"))
+
+            this.context?.let { it1 ->
+                AuthUI.getInstance()
+                    .signOut(it1)
+                    .addOnCompleteListener {
+                        context?.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)?.edit()?.putBoolean("openedBefore", false)
+                            ?.apply()
+                        startActivity(Intent(context, LoginRegisterActivity::class.java).putExtra("action", "login"))
+                    }
+            }
         }
         return v
     }
