@@ -3,7 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical"
                 style="@style/loginParent"
-                tools:context="com.slife.slife.onboarding.RegisterActivity">
+                tools:context="com.slife.slife.onboarding.LoginRegisterActivity">
 
     <ScrollView
             style="@style/parent">
@@ -56,6 +56,11 @@
 
                 <ViewStub
                         android:id="@+id/register_stub"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                <ViewStub
+                        android:id="@+id/setUp_stub"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"/>
 
