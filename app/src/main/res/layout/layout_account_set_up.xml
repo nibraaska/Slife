@@ -58,13 +58,25 @@
         <com.google.android.material.textfield.TextInputLayout
                 style="@style/parent"
                 android:layout_marginTop="@dimen/signup_text_margin_top">
-            <EditText
+            <AutoCompleteTextView
                     android:id="@+id/countrySetUp"
                     style="@style/modifiedEditText"
                     android:inputType="text"
                     android:maxLines="1"
                     android:hint="@string/countrySetUp"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                style="@style/parent"
+                android:layout_marginTop="@dimen/signup_text_margin_top">
+            <AutoCompleteTextView
+                    android:id="@+id/collegesSetUp"
+                    style="@style/modifiedEditText"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:hint="@string/collegeSetUp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <Button
                 android:id="@+id/setUpContinue"

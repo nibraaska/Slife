@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
-
     implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:18.0.0'
 
     //navigation component
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha06'
@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
 
     //Lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.1"

@@ -17,7 +17,7 @@
               android:label="Messages"
               tools:layout="@layout/fragment_messages"/>
     <fragment android:id="@+id/navigation_profile"
-              android:name="com.slife.slife.BottomNavigation.ProfileFragment"
+              android:name="com.slife.slife.BottomNavigation.Profile.ProfileFragment"
               android:label="Profile"
               tools:layout="@layout/fragment_profile"/>
 </navigation>
