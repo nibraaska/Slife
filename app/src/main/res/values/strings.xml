@@ -25,4 +25,5 @@
     <string name="NameSetUp">Name</string>
     <string name="countrySetUp">Country</string>
     <string name="continueSetUp">Continue</string>
+    <string name="collegeSetUp">College</string>
 </resources>
