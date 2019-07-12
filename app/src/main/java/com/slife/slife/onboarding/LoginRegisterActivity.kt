@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.ViewStub
@@ -17,14 +18,19 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import com.slife.slife.BottomNavigation.Universities.Models.CollegesInCountry
+import com.slife.slife.BottomNavigation.Universities.Models.CountryList
+import com.slife.slife.BottomNavigation.Universities.ViewModel.CollegesInCountryViewModel
+import com.slife.slife.BottomNavigation.Universities.ViewModel.CountryListViewModel
 import com.slife.slife.MainActivity
 import com.slife.slife.R
 import java.io.ByteArrayOutputStream
-import android.graphics.BitmapFactory
-
-
 
 
 class LoginRegisterActivity : AppCompatActivity() {
@@ -44,7 +50,8 @@ class LoginRegisterActivity : AppCompatActivity() {
 
     private lateinit var pictureSetUp: ImageView
     private lateinit var nameSetUp: EditText
-    private lateinit var countrySetUp: EditText
+    private lateinit var countrySetUp: AutoCompleteTextView
+    private lateinit var collegeSetUp: AutoCompleteTextView
     private lateinit var continueBtn: Button
     private lateinit var setUpPb: ProgressBar
 
@@ -62,6 +69,16 @@ class LoginRegisterActivity : AppCompatActivity() {
     private val IMAGE_CAPTURE_CODE = 1001
     private var bitmap: Bitmap? = null
     private var outputStream = ByteArrayOutputStream()
+
+    private lateinit var countryList: CountryList
+    private lateinit var countryListViewModel: CountryListViewModel
+    private lateinit var countryListObserver: ((CountryList) -> Unit)
+    private lateinit var countryListStatusObserver: ((CountryListViewModel.Status) -> Unit)
+
+    private lateinit var collegesInCountryList: CollegesInCountry
+    private lateinit var collegesInCountryListViewModel: CollegesInCountryViewModel
+    private lateinit var collegesInCountryListObserver: ((CollegesInCountry) -> Unit)
+    private lateinit var collegesInCountryListStatusObserver: ((CollegesInCountryViewModel.Status) -> Unit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +114,9 @@ class LoginRegisterActivity : AppCompatActivity() {
                 registerView.visibility = View.VISIBLE
             }
         }
+
+        setUpCountryList()
+        setUpCollegesInCountryList()
     }
 
     private fun setUpSetUp(inflatedView: View) {
@@ -104,6 +124,7 @@ class LoginRegisterActivity : AppCompatActivity() {
             pictureSetUp = it.findViewById(R.id.profilePicture)
             nameSetUp = it.findViewById(R.id.nameSetUp)
             countrySetUp = it.findViewById(R.id.countrySetUp)
+            collegeSetUp = it.findViewById(R.id.collegesSetUp)
             continueBtn = it.findViewById(R.id.setUpContinue)
             setUpPb = it.findViewById(R.id.progressSetUp)
         }
@@ -121,8 +142,70 @@ class LoginRegisterActivity : AppCompatActivity() {
             }
         }
 
+        countrySetUp.onItemClickListener =
+            AdapterView.OnItemClickListener{ parent, _, position, _ ->
+                val countrySelected = parent?.getItemAtPosition(position).toString()
+                collegesInCountryListViewModel.getCollegesInCountry(countrySelected)
+        }
+
         continueBtn.setOnClickListener {
             checkFieldsAndSetAccount()
+        }
+    }
+
+    private fun setUpCountryList() {
+        countryListObserver = {
+                catalogs: CountryList ->
+            run {
+                this.countryList = catalogs
+                countrySetUp.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, this.countryList.countryList))
+            }
+        }
+        countryListStatusObserver = {
+            when(it){
+                CountryListViewModel.Status.COMPLETE -> {
+                    Log.d("Country List Status", "COMPLETE" + countryList.countryList.toString())
+                    setUpPb.visibility = View.GONE
+                }
+                CountryListViewModel.Status.LOADING -> {
+                    Log.d("Country List Status", "LOADING")
+                    setUpPb.visibility = View.VISIBLE
+                }
+                CountryListViewModel.Status.FAILED -> Log.d("Country List Status", "FAILED")
+            }
+        }
+        countryListViewModel = ViewModelProviders.of(this).get(CountryListViewModel::class.java)
+        countryListViewModel.let {
+            it.getCountryList().observe(this, Observer(countryListObserver))
+            it.getStatus().observe(this, Observer(countryListStatusObserver))
+        }
+    }
+
+    private fun setUpCollegesInCountryList(){
+        collegesInCountryListObserver = {
+                collegesInCountry: CollegesInCountry ->
+            run {
+                this.collegesInCountryList = collegesInCountry
+                collegeSetUp.setAdapter(ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, this.collegesInCountryList.collegeList))
+            }
+        }
+        collegesInCountryListStatusObserver = {
+            when(it){
+                CollegesInCountryViewModel.Status.COMPLETE -> {
+                    setUpPb.visibility = View.GONE
+                    Log.d("Colleges List Status", "COMPLETE")
+                }
+                CollegesInCountryViewModel.Status.LOADING -> {
+                    setUpPb.visibility = View.VISIBLE
+                    Log.d("Colleges List Status", "LOADING")
+                }
+                CollegesInCountryViewModel.Status.FAILED -> Log.d("Colleges List Status", "FAILED")
+            }
+        }
+        collegesInCountryListViewModel = ViewModelProviders.of(this).get(CollegesInCountryViewModel::class.java)
+        collegesInCountryListViewModel.let {
+            it.getCollegesInCountry("").observe(this, Observer(collegesInCountryListObserver))
+            it.getStatus().observe(this, Observer(collegesInCountryListStatusObserver))
         }
     }
 
@@ -197,8 +280,6 @@ class LoginRegisterActivity : AppCompatActivity() {
         }
         registerBtn.setOnClickListener {
             checkFieldsAndCreateUser()
-            registerView.visibility = View.GONE
-            setUpView.visibility = View.VISIBLE
         }
         registerSignIn.setOnClickListener {
             registerView.visibility = View.GONE
@@ -209,6 +290,7 @@ class LoginRegisterActivity : AppCompatActivity() {
     private fun checkFieldsAndSetAccount(){
         val name = nameSetUp.text.toString().trim()
         val country = countrySetUp.text.toString().trim()
+        val college = collegeSetUp.text.toString().trim()
 
         when {
             bitmap == null -> {
@@ -222,6 +304,10 @@ class LoginRegisterActivity : AppCompatActivity() {
                 countrySetUp.error = "Please choose your country"
                 countrySetUp.requestFocus()
             }
+            college.isEmpty() -> {
+                collegeSetUp.error = "Please choose your college"
+                countrySetUp.requestFocus()
+            }
             else -> {
                 setUpPb.visibility = View.VISIBLE
                 saveData()
@@ -229,16 +315,23 @@ class LoginRegisterActivity : AppCompatActivity() {
                 mainActivityIntent()
             }
         }
-
     }
 
     private fun saveData() {
         val userID = FirebaseAuth.getInstance().currentUser?.uid
-        FirebaseDatabase.getInstance().reference.child("Users").child(userID!!).let {
+        val ref = FirebaseDatabase.getInstance().reference.child("Users").child(userID!!)
+        ref.let {
             it.child("Name").setValue(nameSetUp.text.toString())
             it.child("Country").setValue(countrySetUp.text.toString())
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            it.child("Profile Picture").setValue(Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT))
+            it.child("College").setValue(collegeSetUp.text.toString())
+        }
+        val filePath = FirebaseStorage.getInstance().getReference("profile_images").child(userID)
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
+        val data = outputStream.toByteArray()
+        filePath.putBytes(data).addOnSuccessListener {
+            filePath.downloadUrl.addOnSuccessListener {
+                ref.child("profileImage").setValue(it.toString())
+            }
         }
     }
 
@@ -326,6 +419,8 @@ class LoginRegisterActivity : AppCompatActivity() {
                 if (p0.isSuccessful) {
                     savePrefsData()
                     Toast.makeText(this, "createUserWithEmail", Toast.LENGTH_SHORT).show()
+                    registerView.visibility = View.GONE
+                    setUpView.visibility = View.VISIBLE
                 } else {
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
