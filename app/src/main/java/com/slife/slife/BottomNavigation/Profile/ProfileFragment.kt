@@ -51,7 +51,6 @@ class ProfileFragment : Fragment() {
     private val IMAGE_CAPTURE_CODE = 1001
     private var bitmap: Bitmap? = null
     private var outputStream = ByteArrayOutputStream()
-    private lateinit var encodeByte: ByteArray
 
     private lateinit var countryList: CountryList
     private lateinit var countryListViewModel: CountryListViewModel

@@ -3,12 +3,13 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.slife.slife.BottomNavigation.MessagesFragment">
+             tools:context="com.slife.slife.BottomNavigation.Messages.View.MessagesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <AutoCompleteTextView
+            android:hint="User"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Messages Fragment"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/userAutoComplete"
+    />
 
 </FrameLayout>

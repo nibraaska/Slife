@@ -13,7 +13,7 @@
               android:label="Universities"
               tools:layout="@layout/fragment_universities"/>
     <fragment android:id="@+id/navigation_messages"
-              android:name="com.slife.slife.BottomNavigation.MessagesFragment"
+              android:name="com.slife.slife.BottomNavigation.Messages.View.MessagesFragment"
               android:label="Messages"
               tools:layout="@layout/fragment_messages"/>
     <fragment android:id="@+id/navigation_profile"
