@@ -2,11 +2,13 @@ package com.slife.slife.BottomNavigation.Messages.View
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -45,9 +47,11 @@ class MessagesFragment : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists() && p0.childrenCount > 0){
                     p0.children.forEach {
-                        val user =
-                            UserItem(it.child("Name").value.toString(), it.child("profileImage").value.toString())
-                        userList.add(user)
+                        if (it.key.toString() != FirebaseAuth.getInstance().currentUser?.uid) {
+                            val user =
+                                UserItem(it.child("Name").value.toString(), it.child("profileImage").value.toString())
+                            userList.add(user)
+                        }
                     }
                     userAdapter =
                         UserAutoCompleteAdapter(context!!, userList)
