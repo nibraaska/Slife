@@ -9,3 +9,6 @@ This tools used in this app are:
 - Google Places
 - Google API's
 - RetroFit
+- Python
+
+This repository also contains a script for web scraping. The scraper collects information from the internet about the different colleges all over the world and creates a JSON file with this information. The JSON file is put Firebase for easy access. 
